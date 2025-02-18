@@ -52,4 +52,4 @@ SELECT name FROM SHIPS WHERE name = class
 SELECT name FROM SHIPS WHERE name LIKE 'R%'
 
 --6
-SELECT name FROM SHIPS WHERE name LIKE '%_% %_%'
+SELECT name FROM SHIPS WHERE name LIKE '_% _%'
