@@ -61,7 +61,7 @@ VALUES('T4 Tour', 'Bulgaria', 'Sofia','+359');
 use pc;
 
 --8
-CREATE INDEX idx_product_model ON product(model)
+CREATE CLUSTERED INDEX idx_product_model ON product(model)
 
 
 use ships;
