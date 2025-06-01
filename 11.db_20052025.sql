@@ -1,0 +1,48 @@
+use flights;
+
+--1
+ALTER TABLE Flights ADD num_pass INT
+
+UPDATE Flights 
+SET num_pass = 
+(
+SELECT COUNT(*) FROM BOOKINGS WHERE STATUS = 1 AND FLIGHT_NUMBER = FNUMBER
+)
+
+select * from bookings
+select * from flights
+
+--2
+ALTER TABLE Agencies ADD num_book INT
+
+UPDATE Agencies 
+SET num_book = 
+(
+SELECT COUNT(*) FROM BOOKINGS WHERE AGENCIES.NAME = BOOKINGS.AGENCY
+)
+
+select * from bookings
+select * from AGENCIES
+
+--3,4,5
+CREATE TRIGGER trrg_bookings
+ON Bookings FOR INSERT, UPDATE, DELETE
+AS BEGIN
+	UPDATE F
+	SET num_pass = 
+	(
+		SELECT COUNT(*) FROM BOOKINGS B
+		WHERE STATUS = 1 AND F.FNUMBER = B.FLIGHT_NUMBER
+	)
+	FROM FLIGHTS F JOIN (SELECT DISTINCT FLIGHT_NUMBER FROM inserted I) as I
+		ON F.FNUMBER = I.FLIGHT_NUMBER;
+
+	UPDATE A
+	SET num_book = 
+	(
+		SELECT COUNT(*) FROM BOOKINGS B
+		WHERE STATUS = 1 AND A.NAME = B.AGENCY
+	)
+	FROM AGENCIES A JOIN (SELECT DISTINCT AGENCY FROM inserted) as I
+		ON A.NAME = I.AGENCY;
+END
